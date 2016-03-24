@@ -22,9 +22,6 @@ public interface ServiceAPI {
      * Request a user for his permission to link him to a customer service/website.
      *
      * @param serviceId   Website service id
-     * @param userRef     User reference that will represent this user within the specified service/website
-     * @param redirectUrl URL to redirect to after user approval is completed
-     * @param cancelUrl   URL to redirect to if the user wants to cancel the operation
      * @return URL to redirect user for him to perform authentication
      */
     @POST
