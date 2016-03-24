@@ -6,6 +6,7 @@ package com.kloudtek.idvkey.api;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.*;
 
 /**
  * Interface of JAX-RS IDVKey REST API server

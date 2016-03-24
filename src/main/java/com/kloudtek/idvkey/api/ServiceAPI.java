@@ -4,6 +4,7 @@
 
 package com.kloudtek.idvkey.api;
 
+import javax.ws.rs.*;
 import java.util.List;
 
 /**
