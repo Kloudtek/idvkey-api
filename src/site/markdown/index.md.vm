@@ -1,0 +1,35 @@
+#set($h1 = '#')
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+<head>
+    <title>About</title>
+</head>
+
+Using our IDVKey API, you will be able to easily integrate IDVKey's capabilities with your website and services (even offline services like for example authenticating a user over the phone).
+
+In order to integrate with IDVKey, we provide a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer),
+as well as various Software Development Kits (SDK) that will allow you to very easily use those APIs.
+
+We currently provide SDKs for the following platforms/applications:
+
+* [Java](idvkey-sdk-java/index.html), with a [JSF-based example website](https://github.com/Kloudtek/idvkey-sdk/tree/master/examples/jsf)
+* PHP (soon)
+
+More SDKs will be implemented in the future based on demand, feel free to add a request in the
+[issue tracker](https://github.com/Kloudtek/idvkey-sdk/issues) for your favorite platform/application,
+as we'll use that in order to prioritise new SDKs implementations.
+
+Alternatively should you wish to implement your own REST integration, you'll find documentation
+and specs in the [API section](api/index.html)
+
+The following operations are currently provided in the API
+
+| Operation        | Overview                                                  | Linking required         | Default Timeout  |
+| ---------------- |:---------------------------------------------------------:|:------------------------:| ---------------- |
+| Authentication   | Authenticate a user (automatically links him if required) |                          | 5 mins           |
+| Approval         | Request a user to approve something                       | <span
+        class="icon-ok"/>  | 5 mins           |
+| Link User        | Request a user to approve linking to your service (this isn't generally unless you wish to use IDVKey without authentication)  | | 5 mins   |
+
+See [Using IDVKey APIs](using-apis.html) for more details on those API operations

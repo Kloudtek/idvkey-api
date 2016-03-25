@@ -19,7 +19,7 @@ public class AbstractNotificationRequest {
     private String serviceId;
     @JsonProperty(required = true)
     @NotNull
-    private URL redirectUrl;
+    private URL callbackUrl;
     @JsonProperty(required = true)
     @NotNull
     private URL cancelUrl;
@@ -27,9 +27,9 @@ public class AbstractNotificationRequest {
     public AbstractNotificationRequest() {
     }
 
-    public AbstractNotificationRequest(String serviceId, URL redirectUrl, URL cancelUrl) {
+    public AbstractNotificationRequest(String serviceId, URL callbackUrl, URL cancelUrl) {
         this.serviceId = serviceId;
-        this.redirectUrl = redirectUrl;
+        this.callbackUrl = callbackUrl;
         this.cancelUrl = cancelUrl;
     }
 
@@ -43,12 +43,12 @@ public class AbstractNotificationRequest {
     }
 
     @NotNull
-    public URL getRedirectUrl() {
-        return redirectUrl;
+    public URL getCallbackUrl() {
+        return callbackUrl;
     }
 
-    public void setRedirectUrl(@NotNull URL redirectUrl) {
-        this.redirectUrl = redirectUrl;
+    public void setCallbackUrl(@NotNull URL callbackUrl) {
+        this.callbackUrl = callbackUrl;
     }
 
     @NotNull

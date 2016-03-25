@@ -13,7 +13,7 @@ public class AuthenticationRequest extends AbstractNotificationRequest {
     public AuthenticationRequest() {
     }
 
-    public AuthenticationRequest(String serviceId, URL redirectUrl, URL cancelUrl) {
-        super(serviceId, redirectUrl, cancelUrl);
+    public AuthenticationRequest(String serviceId, URL callbackURL, URL cancelUrl) {
+        super(serviceId, callbackURL, cancelUrl);
     }
 }

@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kloudtek.kryptotek.CryptoUtils;
 import com.kloudtek.kryptotek.DigestAlgorithm;
 import com.kloudtek.kryptotek.key.HMACKey;
-import com.kloudtek.util.StringUtils;
 
 import java.io.Serializable;
 import java.security.InvalidKeyException;
+import java.util.Base64;
 
 /**
  * Created by yannick on 27/08/15.
@@ -42,7 +42,7 @@ public class APIKeyBundle implements Serializable {
         if (type != KeyType.HMAC_SHA256) {
             throw new IllegalArgumentException("Key is not an HMAC_SHA256 Key: " + type.name());
         }
-        return CryptoUtils.readHMACKey(DigestAlgorithm.SHA256, StringUtils.base64Decode(value));
+        return CryptoUtils.readHMACKey(DigestAlgorithm.SHA256, Base64.getDecoder().decode(value));
     }
 
     public String getId() {

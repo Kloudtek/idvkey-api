@@ -1,0 +1,217 @@
+#set($h1 = '#')
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+<head>
+    <title>Using IDVKey APIs</title>
+</head>
+
+$h2 Setup
+
+Before you can use any of the API, you will need to:
+
+1) install the [IDVKey app](https://www.idvkey.com/)
+
+2) Register it and login to the [IDVKey Portal](https://portal.idvkey.com)
+
+3) Register your website
+
+4) Create an api key
+
+$h2 SDKs
+
+The easiest way to use the APIs is to use one of our SDK (Software Development Kit):
+
+* [Java](http://www.idvkey.com/support/dev/sdk/idvkey-sdk-java/index.html)
+
+If your platform isn't supported by one of our development kits, you will need to write code to perform the HTTP rest operations,
+as well as it's security.
+
+In order to do so please see [API Security](api-security.html) for details on how to implement the REST security
+
+And you'll find details on the REST APIs themselves in our [low-level REST API Documentation](raml/idvkey.html) which is based
+on the RAML format (you can also [download the "raw" RAML files](raml/idvkey-raml.zip))
+
+$h2 Notification operations
+
+Notification operations are the type of IDVKey operation most commonly used, and are all used in a 2 step process.
+
+1) Invoke the approve REST API in order to send the notification, including a callback URL on your website where the user will
+eventually be redirected to after he's responded to the notification. This will return an operation id and a url that you should redirect your user's browser to
+
+2) The user will eventually return to your website at the URL you provided when you invoked the notification operation,
+appended with a query parameter 'opId'. You then should use this opId to invoke a second corresponding API in order to see what was the user's response.
+
+Because of this process, in certain cases you will need to store your user's state between the point where you redirect him and the point where he returns to your website.
+For example if you are using the approval operation to confirm changing the user's email address, you would need to store the new email address he submitted and only change it
+once you've called the "get approval state" operation.
+
+How you store this state is of a vital importance, because if it's done in the wrong way it would open the way for a hacker to change this data and perform an operation that is
+different from what the user has approved on his IDVKey device, so keep in mind that your security will only be so good as whatever method you choose.
+
+The best way to store this data is keep it in your server infrastructure, for example in a server-side session, or in a database.
+
+A less secure ways to do it would be to store the state in a cookie (in which case we strongly recommend you cryptographically sign the data and then verify it before using it).
+
+**Under no circonstance should you ever include that data in the callback URL** as that would be too easy for a third party to maliciously change.
+
+$h4 Authentication
+
+The authentication operation will allow you to request a user to authenticate himself with your website.
+
+So for example using the Java SDK, you would write
+
+```
+OperationResult operationResult = apiClient.authenticateUser(serviceId, new URL("https://mysite.com/confirmidvkeyauth"), new URL("https://mysite.com/index.html"))
+```
+
+or as a REST operation
+
+```
+POST /api/notifications/authentication HTTP/1.0
+Content-Type: application/json
+Accept: application/json
+
+{
+"serviceId": "ASDFJDFSUJI8ASDF2ASDFJI54A",
+"callbackUrl": "https://mysite.com/confirmidvkeyauth",
+"cancelUrl": "https://mysite.com/index.html",
+}
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"opId": "jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA",
+"redirectUrl": "https://portal.idvkey.com/auth.xhtml?token=jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA&url=http%3A%2F%mysite.com%3A53822%2Fconfirmidvkeyauth&cancelUrl=http%3A%2F%mysite.com%3A53822%2Findex.html"
+}
+```
+
+This operation will return the operation id and redirect url
+
+
+You could then just redirect the user to the URL specified in redirectUrl. For example in java servlet API this would be
+
+```
+httpServletRequest.sendRedirect(operationResult.getRedirectUrl().toString());
+```
+
+The user will then be request to approve authentication if he already has linked himself to your service, or to approve linking to your service otherwise.
+
+Once he's done so, he will be redirected to the callback url you specified, appended with opId as a query parameter. So
+for the above examples he would be redirected to `https://mysite.com/confirmidvkeyauth?opId=jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA`
+
+At this point you would need to check if the user has approved authentication, and which is his user reference:
+
+Java:
+
+```
+AuthenticationStatus status = apiClient.getAuthenticationStatus(authOpId);
+```
+
+REST
+
+```
+GET /api/notifications/authentication/jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA HTTP/1.0
+Accept: application/json
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"replied": true,
+"approved": true,
+"userRef": "idvkey-fdsu832rjsdalf3894"
+}
+```
+
+If the authentication has been approved, you should then check your database for which user "userRef" corresponds.
+
+If you cannot find a corresponding user, you should ask the user if he already has a user (in which case
+require him to authenticate that user using your current authentication method) or if he wants to create a new user.
+
+In the future we will provide you the ability to change that userRef to allow you to change it be the same as the
+username the user has on your website.
+
+$h4 Approval
+
+You can use this operation to request a user to approve an operation. For example if your user was going to make a transfer
+in a banking website:
+
+Java
+
+```
+URL callbackUrl = new URL("https://mysite.com/dorequesttask.html");
+URL cancelUrl = new URL("https://mysite.com/dorequesttask.html?cancel=true");
+String approvalTitle = "Confirm cash transfer";
+String approvalText = "Please confirm transfer of "+transferRequest.getAmount()+" from account "+transferRequest.getFrom()+" to "+transferRequest.getTo());
+ApprovalRequest approvalRequest = new ApprovalRequest(websiteId, userRef, callbackUrl, cancelUrl, approvalTitle, approvalText);
+OperationResult operationResult = apiClient.requestApproval(approvalRequest);
+```
+
+REST
+
+```
+POST /api/notifications/approval HTTP/1.0
+Content-Type: application/json
+Accept: application/json
+
+{
+"serviceId": "ASDFJDFSUJI8ASDF2ASDFJI54A",
+"userRef": "idvkey-fdsu832rjsdalf3894",
+"callbackUrl": "https://mysite.com/dorequesttask.html",
+"cancelUrl": "https://mysite.com/dorequesttask.html?cancel=true",
+"title": "Confirm cash transfer",
+"text": "Please confirm transfer of 1000 USD from account 243792834 to 974239847
+}
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"opId": "rj2839jsldkrfj8932wrjolsdfu93284lkursd8ru",
+"redirectUrl": "https://portal.idvkey.com/operation.xhtml?token=rj2839jsldkrfj8932wrjolsdfu93284lkursd8ru&url=http%3A%2F%mysite.com%3A53822%2Fconfirmidvkeyauth&cancelUrl=http%3A%2F%mysite.com%3A53822%2Findex.html"
+}
+```
+
+As mentioned above it is important that you store the details of what operation you are approve in a secure manner, so
+for example in java we could store that in the servlet session
+
+```
+httpServletRequest.getSession().setAttribute("idvkeyop-"+operationResult.getOpId(),transferRequest);
+```
+
+You then proceed to redirect the user to the url provided, and eventually the user browser will be redirected to your
+callback url, at which point you will need to check if the user has approved the operation or not:
+
+Java
+
+```
+String opId = JSFUtils.getHttpRequest().getParameter("opId");
+ApprovalRequestStatus approvalState = apiClient.getApprovalState(opId);
+if( approvalState.getState() == ApprovalRequestStatus.State.APPROVED ) {
+TransferRequest transferRequest = (TransferRequest) httpServletRequest.getSession().getAttribute("idvkeyop-"+opId);
+if(transferRequest == null) {
+throw new IllegalArgumentException("Invalid opId");
+} else {
+transferService.doTransfer(transferRequest)
+httpServletRequest.getSession().removeAttribute("idvkeyop-"+opId);
+}
+} else {
+httpServletRequest.sendRedirect("/index.html");
+}
+```
+
+REST
+
+```
+GET /api/notifications/approval/rj2839jsldkrfj8932wrjolsdfu93284lkursd8ru HTTP/1.0
+Accept: application/json
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"state": "ACCEPTED"
+}
+```

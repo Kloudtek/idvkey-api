@@ -41,6 +41,6 @@ public interface NotificationAPIService {
     @GET
     @Path("approval/{opId}")
     @AuthenticateCustomer
-    @Produces("text/plain")
-    ApprovalState getUserApprovalState(@NotNull @PathParam("opId") String opId);
+    @Produces("application/json")
+    ApprovalRequestStatus getUserApprovalState(@NotNull @PathParam("opId") String opId);
 }

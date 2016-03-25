@@ -52,9 +52,11 @@ mediaType:  application/json
               description: The opId that was returned in the linking request operation
           responses:
             200:
-              description: "Returns the request state, which will be either: PENDING, ACCEPTED or DENIED"
+              description: "Returns the request state (PENDING, ACCEPTED or DENIED)"
               body:
-                text/plain:
+                application/json:
+                  schema: !include serviceLinkRequestStatus.json
+                  example: !include serviceLinkRequestStatus-example.json
             404:
               description: Service or link request not found
       /ref/{userRef}:
@@ -85,8 +87,8 @@ mediaType:  application/json
       description: Request user authentication
       body:
         application/json:
-          schema: !include auth-request.json
-          example: !include auth-request-example.json
+          schema: !include authRequest.json
+          example: !include authRequest-example.json
       responses:
         200:
           description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
@@ -103,8 +105,8 @@ mediaType:  application/json
           200:
             body:
               application/json:
-                schema: !include auth-status.json
-                example: !include auth-status-example.json
+                schema: !include authRequestStatus.json
+                example: !include authRequestStatus-example.json
           404:
             description: authentication or service not found
             body:
@@ -115,8 +117,8 @@ mediaType:  application/json
       description: Request user approval
       body:
         application/json:
-          schema: !include approval-request.json
-          example: !include approval-request-example.json
+          schema: !include approvalRequest.json
+          example: !include approvalRequest-example.json
       responses:
         200:
           description: Request submitted successfully. returns operation id and the url where the user browser should be redirected to in order to complete the operation.

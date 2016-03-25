@@ -1,0 +1,168 @@
+#set($h1 = '#')
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+<head>
+    <title>Using IDVKey APIs</title>
+</head>
+
+$h2 Overview
+
+In order to use our API, you can either use HMAC authentication, or Basic authentication.
+
+Basic authentication is basically the equivalent of username / password, and is VERY INSECURE due to the fact that [SSL
+security is fundamentally broken](http://www.theregister.co.uk/2011/04/11/state_of_ssl_analysis/)).
+
+If you do decide to use Basic authentication to access our APIs, you will only be able to use it with a website/service
+that you have specified as "Low Security Only", which will restrict the security level your users can assign to your website/service on their app.
+
+*Note: That restriction isn't currently present in our BETA version of our service, but will be implemented soon*
+
+HMAC authentication provides a much higher level of security, but is harder to implement. We will however strive to provide
+Software Development Kits for most platforms in order to avoid you the effort of having to implement it.
+
+If you do need to implement it yourself, here's the specifications on how to do so:
+
+$h2 HMAC authentication specification
+
+When submitting an API request to our servers, you need to use your API Key to sign the HTTP request.
+
+In order to do that, you will need to add three headers to your HTTP request:
+
+**X-NOUNCE**: This should a different string for every request (whatever the string is doesn't matter). We highly recommend using a (UUID)[https://en.wikipedia.org/wiki/Universally_unique_identifier] algorithm.
+
+**X-TIMESTAMP**: This should be a timestamp in (ISO 8601)[https://en.wikipedia.org/wiki/ISO_8601] format, using UTC timezone. So for example: `2014-12-30T23:54:46` . Please note it is important that your time is accurate, otherwise the requests will fail authentication.
+
+**X-IDENTITY**: This will need to be set to the value of the api key "id"
+
+**X-SIGNATURE**: This will need to be set to the generated signature for this request.
+
+In order to generate the signature, you will need to concatenate various elements of data from the request, before using the API key to sign that data (`\n` = NEWLINE).
+
+```
+HTTP METHOD (in upper case) + \n + URI + \n + NOUNCE + \n + ISOTIMESTAMP + \n IDENTITY (value of X-IDENTITY header) + \n + REQUEST CONTENT (optional)
+```
+
+The whole string should then be converted to bytes using UTF-8, and appended with the POST DATA (if any). This will provide you with the data to be signed
+
+so in java this could would be:
+
+```
+ByteArrayOutputStream buf = new ByteArrayOutputStream();
+String appendedData = method.toUpperCase().trim() + '\n' + uri.trim() + '\n' + nounce + '\n' + timestamp.trim().toUpperCase() + '\n' + identity + '\n');
+buf.write(appendedData.getBytes("UTF-8"));
+if( content != null ) {
+buf.write(content);
+}
+byte[] dataToSign = buf.toByteArray();
+```
+
+So for example, assuming you have been assigned the following HMAC-256 key (raw key base64 encoded with the id `somekeyid`):
+
+```
+9vY7UUGRlpuk4MxXdTPPbqqFwcKVvpMbFwbGv+b/V2c=
+```
+
+If you needed to perform a POST operation to the url `https://api.idvkey.com/someapi` and submit the string `hello world` as payload, you would need to first generate a nounce which for this example will be:
+
+```
+e44fc2ca-460a-4e82-b88f-41dca6cdec19
+```
+
+For this operation let's assume the timestamp is:
+
+```
+2016-03-30T23:54:46
+```
+
+You would then concatenate all information into the following string:
+
+```
+GET
+https://api.idvkey.com/someapi
+e44fc2ca-460a-4e82-b88f-41dca6cdec19
+2016-03-30T23:54:46
+somekeyid
+```
+
+Please note there is no newline (\n) at the end of that string.
+
+Once base64 encoded this string will have the following content (base64 encoded):
+
+```
+R0VUCmh0dHBzOi8vYXBpLmlkdmtleS5jb20vc29tZWFwaQplNDRmYzJjYS00NjBhLTRlODItYjg4Zi00MWRjYTZjZGVjMTkKMjAxNi0wMy0zMFQyMzo1NDo0Ngpzb21la2V5aWQK
+```
+
+But since we're posting data, we should append the "hello world" string to it, so the data to be signed should be (base64 encoded):
+
+```
+R0VUCmh0dHBzOi8vYXBpLmlkdmtleS5jb20vc29tZWFwaQplNDRmYzJjYS00NjBhLTRlODItYjg4Zi00MWRjYTZjZGVjMTkKMjAxNi0wMy0zMFQyMzo1NDo0Ngpzb21la2V5aWQKaGVsbG8gd29ybGQ=
+```
+
+So using the key above you would sign the data which would generate the following signature (base64 encoded)
+
+```
+aFRyoKNJxKPtZW4+cywAdiYcIbUbb9ZH5wkzxkG0t0Y=
+```
+
+So using all this data, your HTTP request should be:
+
+```
+POST /someapi HTTP/1.0
+X-NOUNCE: e44fc2ca-460a-4e82-b88f-41dca6cdec19
+X-TIMESTAMP: 2016-03-30T23:54:46
+X-IDENTITY: somekeyid
+X-SIGNATURE: aFRyoKNJxKPtZW4+cywAdiYcIbUbb9ZH5wkzxkG0t0Y=
+
+hello world
+```
+
+The response to your require will similarly be signed, this time by concatenating
+
+```
+NOUNCE + \n + REQUEST SIGNATURE + \n + STATUS CODE + \n + RESPONSE CONTENT (optional)
+```
+
+Like for the request convert this using base64 encode and append any data returned by the http request.
+
+This logic in java would be:
+
+```
+ByteArrayOutputStream buf = new ByteArrayOutputStream();
+String str = nounce.trim() + "\n" + requestSignature.trim() + "\n" + Integer.toString(statusCode) + "\n";
+buf.write(str.getBytes("UTF-8"));
+if( content != null ) {
+buf.write(content);
+}
+buf.close();
+byte[] dataToSign = buf.toByteArray();
+```
+
+So for example let's assume the response from that request is
+
+```
+HTTP/1.0 200 OK
+X-SIGNATURE: NTKomKvtl03xIyURWIWNwbcDZe0YW30mcf4y2apBcFA=
+
+success
+```
+
+In order to validate the response you would build the string:
+
+```
+e44fc2ca-460a-4e82-b88f-41dca6cdec19
+aFRyoKNJxKPtZW4+cywAdiYcIbUbb9ZH5wkzxkG0t0Y=
+200
+```
+
+and then append the string 'success', which results in the following data (base64 encoded):
+
+```
+ZTQ0ZmMyY2EtNDYwYS00ZTgyLWI4OGYtNDFkY2E2Y2RlYzE5CmFGUnlvS05KeEtQdFpXNCtjeXdBZGlZY0liVWJiOVpINXdrenhrRzB0MFk9CjIwMApzdWNjZXNz
+```
+
+Using your HMAC key you can create the (base64 encoded) signature `NTKomKvtl03xIyURWIWNwbcDZe0YW30mcf4y2apBcFA=` which you can compare against the value returned in the header 'X-SIGNATURE' from the response
+
+For a java implementation of this logic it can be found in our open source project kryptotek on github: [https://github.com/Kloudtek/kryptotek-oss](https://github.com/Kloudtek/kryptotek-oss)
+
+this includes a unit test with the same data as specified above: [https://github.com/Kloudtek/kryptotek-oss/blob/master/rest/shared/src/test/java/com/kloudtek/kryptotek/rest/RESTRequestSignerTest.java](https://github.com/Kloudtek/kryptotek-oss/blob/master/rest/shared/src/test/java/com/kloudtek/kryptotek/rest/RESTRequestSignerTest.java)

@@ -49,8 +49,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -120,6 +120,9 @@
                                         <filter token="version" value="${project.version}"/>
                                     </filterset>
                                 </copy>
+                                <zip destfile="${project.build.directory}/site/raml/idvkey-raml.zip">
+                                    <fileset dir="${project.basedir}/src/raml"/>
+                                </zip>
                             </tasks>
                         </configuration>
                         <goals>
@@ -225,7 +228,7 @@
     <distributionManagement>
         <site>
             <id>idvkey.site</id>
-            <url>s3://www.idvkey.com/support/api</url>
+            <url>s3://www.idvkey.com/support/dev</url>
         </site>
         <repository>
             <id>ossrh</id>
