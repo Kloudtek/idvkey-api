@@ -30,6 +30,6 @@ The following operations are currently provided in the API
 | Authentication   | Authenticate a user (automatically links him if required) |                          | 5 mins           |
 | Approval         | Request a user to approve something                       | <span
         class="icon-ok"/>  | 5 mins           |
-| Link User        | Request a user to approve linking to your service (this isn't generally unless you wish to use IDVKey without authentication)  | | 5 mins   |
+| Link User        | Request a user to approve linking to your service (this is generally not needed unless you wish to use IDVKey without user authentication)  | | 5 mins   |
 
 See [Using IDVKey APIs](using-apis.html) for more details on those API operations
