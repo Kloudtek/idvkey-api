@@ -22,6 +22,7 @@ public interface ServiceAPI {
      * Request a user for his permission to link him to a customer service/website.
      *
      * @param serviceId   Website service id
+     * @param serviceLinkRequest Service link request
      * @return URL to redirect user for him to perform authentication
      */
     @POST
