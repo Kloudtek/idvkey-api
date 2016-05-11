@@ -15,6 +15,16 @@
       "type": "string",
       "format": "uri",
       "description": "URL on service website where the user will be redirected if he cancels the link request operation"
+    },
+    "securityLevel": {
+      "type": "string",
+      "description": "Security level for the approval request",
+      "enum": [
+        "LOW",
+        "STANDARD",
+        "HIGH",
+        "VERY_HIGH"
+      ]
     }
   }
 }
