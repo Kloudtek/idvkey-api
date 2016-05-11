@@ -6,6 +6,7 @@ package com.kloudtek.idvkey.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 
@@ -34,15 +35,19 @@ public class ApprovalRequest extends AbstractNotificationRequest {
     private String denyMsg;
     @JsonProperty
     private String approveMsg;
+    @JsonProperty
+    private SecurityLevel securityLevel;
 
     public ApprovalRequest() {
     }
 
-    public ApprovalRequest(@NotNull String serviceId, @NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl, @NotNull String title, @NotNull String text) {
+    public ApprovalRequest(@NotNull String serviceId, @NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl,
+                           @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel) {
         super(serviceId, redirectUrl, cancelUrl);
         this.userRef = userRef;
         this.title = title;
         this.text = text;
+        this.securityLevel = securityLevel;
     }
 
     @NotNull
@@ -118,5 +123,13 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public void setApproveMsg(String approveMsg) {
         this.approveMsg = approveMsg;
+    }
+
+    public SecurityLevel getSecurityLevel() {
+        return securityLevel;
+    }
+
+    public void setSecurityLevel(SecurityLevel securityLevel) {
+        this.securityLevel = securityLevel;
     }
 }

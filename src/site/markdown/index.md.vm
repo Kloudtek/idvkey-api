@@ -21,7 +21,7 @@ More SDKs will be implemented in the future based on demand, feel free to add a 
 as we'll use that in order to prioritise new SDKs implementations.
 
 Alternatively should you wish to implement your own REST integration, you'll find documentation
-and specs in the [API section](api/using-apis.html)
+and specs in the [API section](using-apis.html)
 
 The following operations are currently provided in the API
 
