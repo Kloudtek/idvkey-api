@@ -53,6 +53,16 @@
     "approveMsg": {
       "type": "string",
       "description": "If this is set and the approves the request, the user will be displayed this message"
+    },
+    "securityLevel": {
+      "type": "string",
+      "description": "Security level for the approval request (if not set will default to website suggested security level)",
+      "enum": [
+        "LOW",
+        "STANDARD",
+        "HIGH",
+        "VERY_HIGH"
+      ]
     }
   },
   "required": [

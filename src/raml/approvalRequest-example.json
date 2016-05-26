@@ -4,5 +4,6 @@
   "callbackUrl": "https://mysite.com/public/mywebsite",
   "cancelUrl": "https://mysite.com/public/cancelUrl",
   "title": "Approve transfer",
+  "securityLevel": "HIGH",
   "text": "Please confirm transfer of 2000 USD from account 328497298347 to account 54723234234"
 }

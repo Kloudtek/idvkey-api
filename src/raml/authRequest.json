@@ -15,6 +15,16 @@
       "type": "string",
       "format": "uri",
       "description": "URL to redirect user if he cancels the approval operation"
+    },
+    "securityLevel": {
+      "type": "string",
+      "description": "Security level for the approval request (if not set will default to website suggested security level)",
+      "enum": [
+        "LOW",
+        "STANDARD",
+        "HIGH",
+        "VERY_HIGH"
+      ]
     }
   },
   "required": [
