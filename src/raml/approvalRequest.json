@@ -28,6 +28,10 @@
       "type": "string",
       "description": "Approval text"
     },
+    "shortText": {
+      "type": "string",
+      "description": "When set, allows the user to approve/deny through quick actions (ie android notifications). Make this text as short as possible"
+    },
     "centeredHorizontal": {
       "type": "boolean",
       "description": "Indicate if the text should be centered horizontally in the screen",
