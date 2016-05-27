@@ -24,6 +24,8 @@ public class ApprovalRequest extends AbstractNotificationRequest {
     @javax.validation.constraints.NotNull
     private String text;
     @JsonProperty
+    private String shortText;
+    @JsonProperty
     private boolean centeredHorizontal = true;
     @JsonProperty
     private boolean centeredVertical = true;
@@ -80,6 +82,14 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public void setText(@NotNull String text) {
         this.text = text;
+    }
+
+    public String getShortText() {
+        return shortText;
+    }
+
+    public void setShortText(String shortText) {
+        this.shortText = shortText;
     }
 
     public boolean isCenteredHorizontal() {
