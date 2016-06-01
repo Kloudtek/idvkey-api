@@ -4,6 +4,7 @@
 
 package com.kloudtek.idvkey.api;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import java.util.List;
 
@@ -47,4 +48,17 @@ public interface ServiceAPI {
     @Path("{serviceId}/links/ref/{userRef}")
     @AuthenticateCustomer
     void unlinkUserFromCustomerService(@PathParam("serviceId") String serviceId, @PathParam("userRef") String userRef);
+
+    @POST
+    @Path("{serviceId}/notifications/authentication")
+    @AuthenticateCustomer
+    @Produces("application/json")
+    OperationResult requestAuthentication(@PathParam("serviceId") String serviceId, @Valid AuthenticationRequest authenticationRequest);
+
+    @POST
+    @Path("{serviceId}/notifications/approval")
+    @AuthenticateCustomer
+    @Consumes("application/json")
+    @Produces("application/json")
+    OperationResult requestApproval(@PathParam("serviceId") String serviceId, @Valid ApprovalRequest req);
 }

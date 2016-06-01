@@ -55,25 +55,93 @@ A less secure ways to do it would be to store the state in a cookie (in which ca
 
 **Under no circonstance should you ever include that data in the callback URL** as that would be too easy for a third party to maliciously change.
 
+$h4 Linking a user to your website/service
+
+Before a user can use his IDVKey with your website/service he will need to approve linking it to your website/service.
+
+If you are using the full authentication delegation model documentation below, this will be done automatically. Otherwise you
+will need to need to do so manually this way:
+
+Java:
+
+```
+String websiteId = "7KHEOMKNCZASPIRFCI7VAKW5PI";
+String userRef = "exampleusername";
+URL callbackUrl = new URL("https://mysite.com/confirmidvkeyauth");
+URL cancelUrl = new URL("https://mysite.com/");
+OperationResult linkOperationResult = apiClient.linkUser(websiteId, callbackUrl, userRef, cancelUrl);
+```
+
+REST
+
+```
+POST /api/services/7KHEOMKNCZASPIRFCI7VAKW5PI
+
+{
+"userRef": "exampleusername",
+"url": "https://mysite.com/confirmidvkeyauth",
+"cancelUrl": "https://mysite.com/"
+}
+Accept: application/json
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"opId": "jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA",
+"redirectUrl": "https://portal.idvkey.com/linktoservice.xhtml?token=jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA&url=http%3A%2F%2Fmywebsite.com%3A53822%2Fpublic%2Fmywebsite&cancelUrl=http%3A%2F%2Fmywebsite.com%3A53822%2Fpublic%2FcancelUrl"
+}
+```
+
+You will then need to redirect the user to the redirectUrl returned by IDVKey. After the user has completed the approval he will be forwarded to the url you provided where you will
+need to check if the user has approved or denied the authentication.
+
+Java:
+
+```
+ServiceLinkRequestStatus linkStatus = apiClient.getServiceLinkRequestStatus(websiteId, linkOperationResult.getOpId());
+if( linkStatus == ServiceLinkRequestStatus.ACCEPTED ) {
+// update your user db to indicate the user is now linked using the userRef you provided
+}
+```
+
+REST:
+
+```
+GET /api/services/7KHEOMKNCZASPIRFCI7VAKW5PI/links/requests/jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"state": "ACCEPTED",
+"userRef": "exampleusername"
+}
+```
+
 $h4 Authentication
 
 The authentication operation will allow you to request a user to authenticate himself with your website.
 
+There is two different methods of authenticating your user, one is to fully delegate authentication to IDVKey (in which case he only needs his IDVKey password), or to first authenticate him/her
+yourself (generally with username/password) and then request him/her to approve the authentication using IDVKey. The later approach is less convenient for the user but technically more secure.
+
+$h5 Option 1: Full authentication delegation
+
 So for example using the Java SDK, you would write
 
 ```
-OperationResult operationResult = apiClient.authenticateUser(serviceId, new URL("https://mysite.com/confirmidvkeyauth"), new URL("https://mysite.com/index.html"))
+OperationResult operationResult = apiClient.authenticateUser(serviceId, new URL("https://mysite.com/confirmidvkeyauth"), new URL("https://mysite.com/index.html"), null)
 ```
 
 or as a REST operation
 
 ```
-POST /api/notifications/authentication HTTP/1.0
+POST /api/services/ASDFJDFSUJI8ASDF2ASDFJI54A/notifications/authentication HTTP/1.0
 Content-Type: application/json
 Accept: application/json
 
 {
-"serviceId": "ASDFJDFSUJI8ASDF2ASDFJI54A",
 "callbackUrl": "https://mysite.com/confirmidvkeyauth",
 "cancelUrl": "https://mysite.com/index.html",
 }
@@ -106,7 +174,7 @@ At this point you would need to check if the user has approved authentication, a
 Java:
 
 ```
-AuthenticationStatus status = apiClient.getAuthenticationStatus(authOpId);
+AuthenticationStatus status = apiClient.getAuthenticationStatus(authOpId,false);
 ```
 
 REST
@@ -119,8 +187,7 @@ HTTP/1.0 200 OK
 Content-Type: application/json
 
 {
-"replied": true,
-"approved": true,
+"status": "ACCEPTED",
 "userRef": "idvkey-fdsu832rjsdalf3894"
 }
 ```
@@ -132,6 +199,20 @@ require him to authenticate that user using your current authentication method) 
 
 In the future we will provide you the ability to change that userRef to allow you to change it be the same as the
 username the user has on your website.
+
+$h5 Option 2: Partial authentication delegation
+
+In this scenario you will need to have the user already linked to your website/service.
+
+Then when you a user tries to access your website/service, identify him (for example using his username/password) and then
+just invoke the authentication API as described in option 1, with the only difference being that you'll need to add the userRef
+you assigned to the request.
+
+Java:
+
+```
+
+```
 
 $h4 Approval
 

@@ -4,7 +4,6 @@
 
 package com.kloudtek.idvkey.api;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 
@@ -13,12 +12,6 @@ import javax.ws.rs.*;
  */
 @Path("/notifications")
 public interface NotificationAPIService {
-    @POST
-    @Path("authentication")
-    @AuthenticateCustomer
-    @Produces("application/json")
-    OperationResult requestAuthentication(@Valid AuthenticationRequest authenticationRequest);
-
     /**
      * Get the user ref for the user authenticated with that operation id
      *
@@ -29,14 +22,7 @@ public interface NotificationAPIService {
     @Path("authentication/{opId}")
     @Produces("application/json")
     @AuthenticateCustomer
-    AuthenticationStatus getAuthenticationStatus(@NotNull @PathParam("opId") String opId);
-
-    @POST
-    @Path("approval")
-    @AuthenticateCustomer
-    @Consumes("application/json")
-    @Produces("application/json")
-    OperationResult requestApproval(@Valid ApprovalRequest req);
+    AuthenticationRequestStatus getAuthenticationStatus(@NotNull @PathParam("opId") String opId, @QueryParam("preId") Boolean preIdentified);
 
     @GET
     @Path("approval/{opId}")

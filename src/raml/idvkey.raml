@@ -47,9 +47,6 @@ mediaType:  application/json
       /requests/{opId}:
         get:
           description: Check the status of a link operation request
-          queryParameters:
-            opId:
-              description: The opId that was returned in the linking request operation
           responses:
             200:
               description: "Returns the request state (PENDING, ACCEPTED or DENIED)"
@@ -77,27 +74,47 @@ mediaType:  application/json
               description: User was unlinked
             404:
               description: User is not linked, or service does not exist
-    /notifications:
-      /authentication:
-      /approval:
+      /notifications:
+        /authentication:
+          post:
+            description: Request user authentication
+            queryParameters:
+              preId:
+                description: Must be set to true if this is an authentication with a pre-identified user
+            body:
+              application/json:
+                schema: !include authRequest.json
+                example: !include authRequest-example.json
+            responses:
+              200:
+                description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
+                body:
+                  application/json:
+                    schema: !include operationResult.json
+                    example: !include operationResult-example.json
+              404:
+                description: service not found, or authentication not found
+              412:
+                description: If a userRef has been included but no such link to the service has been found
+        /approval:
+          post:
+            description: Request user approval
+            body:
+              application/json:
+                schema: !include approvalRequest.json
+                example: !include approvalRequest-example.json
+            responses:
+              200:
+                description: Request submitted successfully. returns operation id and the url where the user browser should be redirected to in order to complete the operation.
+                body:
+                  application/json:
+                    schema: !include operationResult.json
+                    example: !include operationResult-example.json
+              404:
+                description: service not found
 /notifications:
   description: Notification operations
   /authentication:
-    post:
-      description: Request user authentication
-      body:
-        application/json:
-          schema: !include authRequest.json
-          example: !include authRequest-example.json
-      responses:
-        200:
-          description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
-          body:
-            application/json:
-              schema: !include operationResult.json
-              example: !include operationResult-example.json
-        404:
-          description: service not found
     /{opId}:
       get:
         description: Retrieve the authentication's status (and response if exists)
@@ -108,26 +125,11 @@ mediaType:  application/json
                 schema: !include authRequestStatus.json
                 example: !include authRequestStatus-example.json
           404:
-            description: authentication or service not found
+            description: authentication request or service not found
             body:
               text/plain:
                 description: Error details
   /approval:
-    post:
-      description: Request user approval
-      body:
-        application/json:
-          schema: !include approvalRequest.json
-          example: !include approvalRequest-example.json
-      responses:
-        200:
-          description: Request submitted successfully. returns operation id and the url where the user browser should be redirected to in order to complete the operation.
-          body:
-            application/json:
-              schema: !include operationResult.json
-              example: !include operationResult-example.json
-        404:
-          description: service not found
     /{opId}:
       get:
         description: Retrieve the approval's status

@@ -11,24 +11,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ApprovalRequestStatus {
     @JsonProperty
-    private State state;
+    private ApprovalStatus status;
 
     public ApprovalRequestStatus() {
     }
 
-    public ApprovalRequestStatus(State state) {
-        this.state = state;
+    public ApprovalRequestStatus(ApprovalStatus status) {
+        this.status = status;
     }
 
-    public State getState() {
-        return state;
+    public ApprovalStatus getStatus() {
+        return status;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setStatus(ApprovalStatus status) {
+        this.status = status;
     }
 
-    public enum State {
-        PENDING, APPROVED, DENIED
-    }
 }

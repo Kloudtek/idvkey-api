@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "state": {
+    "status": {
       "type": "string",
       "enum": [
         "PENDING",
@@ -10,5 +10,8 @@
         "DENIED"
       ]
     }
-  }
+  },
+  "required": [
+    "status"
+  ]
 }

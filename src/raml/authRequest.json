@@ -2,10 +2,6 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "serviceId": {
-      "type": "string",
-      "description": "Website/service id"
-    },
     "callbackUrl": {
       "type": "string",
       "format": "uri",
@@ -28,7 +24,6 @@
     }
   },
   "required": [
-    "serviceId",
     "redirectUrl",
     "cancelUrl"
   ]

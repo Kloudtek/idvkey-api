@@ -10,27 +10,26 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Created by yannick on 16/3/16.
  */
-public class AuthenticationStatus extends NotificationStatus {
-    private Boolean approved;
+public class AuthenticationRequestStatus {
+    @JsonProperty
+    private ApprovalStatus status;
     @JsonProperty
     private String userRef;
 
-    public AuthenticationStatus() {
+    public AuthenticationRequestStatus() {
     }
 
-    public AuthenticationStatus(boolean replied, @Nullable Boolean accepted, @Nullable String userRef) {
-        super(replied);
-        this.approved = accepted;
+    public AuthenticationRequestStatus(ApprovalStatus status, @Nullable String userRef) {
+        this.status = status;
         this.userRef = userRef;
     }
 
-    @Nullable
-    public Boolean isApproved() {
-        return approved;
+    public ApprovalStatus getStatus() {
+        return status;
     }
 
-    public void setApproved(@Nullable Boolean approved) {
-        this.approved = approved;
+    public void setStatus(ApprovalStatus status) {
+        this.status = status;
     }
 
     @Nullable
@@ -41,4 +40,5 @@ public class AuthenticationStatus extends NotificationStatus {
     public void setUserRef(String userRef) {
         this.userRef = userRef;
     }
+
 }

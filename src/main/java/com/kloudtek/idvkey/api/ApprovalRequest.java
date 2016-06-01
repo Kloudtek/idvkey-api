@@ -43,14 +43,14 @@ public class ApprovalRequest extends AbstractNotificationRequest {
     public ApprovalRequest() {
     }
 
-    public ApprovalRequest(@NotNull String serviceId, @NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl,
+    public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl,
                            @NotNull String title, @NotNull String text) {
-        this(serviceId, userRef, redirectUrl, cancelUrl, title, text, null);
+        this(userRef, redirectUrl, cancelUrl, title, text, null);
     }
 
-    public ApprovalRequest(@NotNull String serviceId, @NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl,
+    public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl,
                            @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel) {
-        super(serviceId, redirectUrl, cancelUrl);
+        super(redirectUrl, cancelUrl);
         this.userRef = userRef;
         this.title = title;
         this.text = text;

@@ -1,5 +1,4 @@
 {
-  "serviceId": "ASDFJDFSUJI8ASDF2ASDFJI54A",
   "userRef": "my-user-ref",
   "callbackUrl": "https://mysite.com/public/mywebsite",
   "cancelUrl": "https://mysite.com/public/cancelUrl",
