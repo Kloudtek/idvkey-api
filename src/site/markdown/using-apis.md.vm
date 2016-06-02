@@ -2,6 +2,7 @@
 #set($h2 = '##')
 #set($h3 = '###')
 #set($h4 = '####')
+#set($h5 = '#####')
 <head>
     <title>Using IDVKey APIs</title>
 </head>
@@ -123,10 +124,14 @@ $h4 Authentication
 
 The authentication operation will allow you to request a user to authenticate himself with your website.
 
-There is two different methods of authenticating your user, one is to fully delegate authentication to IDVKey (in which case he only needs his IDVKey password), or to first authenticate him/her
-yourself (generally with username/password) and then request him/her to approve the authentication using IDVKey. The later approach is less convenient for the user but technically more secure.
+Before a user can use IDVKey to approve authentication, he will need to be identified which is typically done through
+username/password login. This is done not just to identify who the user is but also to protect him from being randomly
+"spammed" authentication requests by any malicious party.
 
-$h5 Option 1: Full authentication delegation
+User identification can be done either by IDVKey or by the website/service. We recommend the former which is more convenient
+for the user (only one password to remember and he can use rememberme on IDVKey), and easier integration (service link is automatically created).
+
+$h5 Option 1: IDVKey identification
 
 So for example using the Java SDK, you would write
 
@@ -143,7 +148,7 @@ Accept: application/json
 
 {
 "callbackUrl": "https://mysite.com/confirmidvkeyauth",
-"cancelUrl": "https://mysite.com/index.html",
+"cancelUrl": "https://mysite.com/index.html"
 }
 
 HTTP/1.0 200 OK
@@ -200,24 +205,68 @@ require him to authenticate that user using your current authentication method) 
 In the future we will provide you the ability to change that userRef to allow you to change it be the same as the
 username the user has on your website.
 
-$h5 Option 2: Partial authentication delegation
+$h5 Option 2: Website/Service identification
 
 In this scenario you will need to have the user already linked to your website/service.
 
 Then when you a user tries to access your website/service, identify him (for example using his username/password) and then
-just invoke the authentication API as described in option 1, with the only difference being that you'll need to add the userRef
-you assigned to the request.
+then authentication API as described in option 1, with the difference being that you'll need to add the userRef
+you assigned during service link.
 
 Java:
 
 ```
+OperationResult operationResult = apiClient.authenticateUser(serviceId, new URL("https://mysite.com/confirmidvkeyauth"), new URL("https://mysite.com/index.html"), "my-user-ref")
+```
 
+or as a REST operation
+
+```
+POST /api/services/ASDFJDFSUJI8ASDF2ASDFJI54A/notifications/authentication HTTP/1.0
+Content-Type: application/json
+Accept: application/json
+
+{
+"callbackUrl": "https://mysite.com/confirmidvkeyauth",
+"cancelUrl": "https://mysite.com/index.html",
+"userRef": "my-user-ref"
+}
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"opId": "jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA",
+"redirectUrl": "https://portal.idvkey.com/auth.xhtml?token=jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA&url=http%3A%2F%mysite.com%3A53822%2Fconfirmidvkeyauth&cancelUrl=http%3A%2F%mysite.com%3A53822%2Findex.html"
+}
+```
+
+Additionally when checking for the authentication status, you will need to specify that it's been pre-identified.
+
+```
+AuthenticationStatus status = apiClient.getAuthenticationStatus(authOpId,true);
+```
+
+REST
+
+```
+GET /api/notifications/authentication/jeUHkBmqQnq3rZXCA5RBZLtWkx3vhZbvurRfXOAcDPloABhJ17exFHA?preId=true HTTP/1.0
+Accept: application/json
+
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+"status": "ACCEPTED",
+"userRef": "idvkey-fdsu832rjsdalf3894"
+}
 ```
 
 $h4 Approval
 
-You can use this operation to request a user to approve an operation. For example if your user was going to make a transfer
-in a banking website:
+You can use this operation to request a user to approve a sensitive operation.
+
+For example if your user was going to make a transfer in a banking website:
 
 Java
 

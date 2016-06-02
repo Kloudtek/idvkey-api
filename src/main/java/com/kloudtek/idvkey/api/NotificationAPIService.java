@@ -15,7 +15,8 @@ public interface NotificationAPIService {
     /**
      * Get the user ref for the user authenticated with that operation id
      *
-     * @param opId Operation id
+     * @param opId          Operation id
+     * @param preIdentified Indicates if the user has been pre-identified by the service/website or not.
      * @return User ref
      */
     @GET
