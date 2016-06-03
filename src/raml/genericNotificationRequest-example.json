@@ -1,0 +1,29 @@
+{
+  "userRef": "my-user-ref",
+  "callbackUrl": "https://mysite.com/public/mywebsite",
+  "cancelUrl": "https://mysite.com/public/cancelUrl",
+  "title": "Credit card fraud alert",
+  "text": "One of the transactions on your credit card might have been fraudulent, please confirm you paid 50$ at ARCO PETROL STATION in san francisco",
+  "denyConfirmMsg": "Are you certain you wish to report this transaction as likely fraudulent ?",
+  "denyMsg": "Our fraud team will contact you shortly",
+  "cancellable": false,
+  "securityLevel": "STANDARD",
+  "actions": [
+    {
+      "id": "ok",
+      "name": "I did that transaction",
+      "color": "green",
+      "confirmationMsg": null,
+      "postSelectionMsg": null,
+      "location": "MAIN_BUTTON"
+    },
+    {
+      "id": "unidentified",
+      "name": "I don't recognize that transaction",
+      "color": "red",
+      "confirmationMsg": "Our fraud team will contact you shortly",
+      "postSelectionMsg": null,
+      "location": "MAIN_BUTTON"
+    }
+  ]
+}

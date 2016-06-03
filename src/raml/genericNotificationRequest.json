@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "userRef": {
+      "type": "string",
+      "description": "User reference"
+    },
+    "callbackUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to redirect user to after he's been authenticated"
+    },
+    "cancelUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to redirect user if he cancels the approval operation"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title for the approval"
+    },
+    "text": {
+      "type": "string",
+      "description": "Approval text"
+    },
+    "urgent": {
+      "type": "boolean",
+      "description": "If this notification must be read urgently by the user",
+      "default": false
+    }
+    "cancellable": {
+      "type": "string",
+      "description": "Approval text"
+    },
+    "centeredHorizontal": {
+      "type": "boolean",
+      "description": "Indicate if the text should be centered horizontally in the screen",
+      "default": true
+    },
+    "centeredVertical": {
+      "type": "boolean",
+      "description": "Indicate if the text should be centered vertically in the screen",
+      "default": true
+    },
+    "denyConfirmMsg": {
+      "type": "string",
+      "description": "If this is set and the user attempts to deny the approval, this text will be displayed and the user requested to confirm the denial"
+    },
+    "approveConfirmMsg": {
+      "type": "string",
+      "description": "If this is set and the user attempts to deny the approval, this text will be displayed and the user requested to confirm the approval"
+    },
+    "denyMsg": {
+      "type": "string",
+      "description": "If this is set and the user denies the request, the user will be displayed this message"
+    },
+    "approveMsg": {
+      "type": "string",
+      "description": "If this is set and the approves the request, the user will be displayed this message"
+    },
+    "securityLevel": {
+      "type": "string",
+      "description": "Security level for the approval request (if not set will default to website suggested security level)",
+      "enum": [
+        "LOW",
+        "STANDARD",
+        "HIGH",
+        "VERY_HIGH"
+      ]
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "confirmationMsg": {
+            "type": "string"
+          },
+          "postSelectionMsg": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "location": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "MAIN_BUTTON",
+              "MENU"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "location"
+      ]
+    }
+  },
+  "required": [
+    "userRef",
+    "redirectUrl",
+    "cancelUrl",
+    "title",
+    "text"
+  ]
+}
+

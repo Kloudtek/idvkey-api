@@ -5,6 +5,7 @@
 package com.kloudtek.idvkey.api;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public interface ServiceAPI {
     @Produces("application/json")
     @Consumes("application/json")
     @AuthenticateCustomer
-    OperationResult requestUserLink(@PathParam("serviceId") String serviceId, ServiceLinkRequest serviceLinkRequest);
+    OperationResult requestUserLink(@PathParam("serviceId") String serviceId, @NotNull @Valid ServiceLinkRequest serviceLinkRequest);
 
     @GET
     @Path("{serviceId}/links/requests/{opId}")
@@ -53,12 +54,19 @@ public interface ServiceAPI {
     @Path("{serviceId}/notifications/authentication")
     @AuthenticateCustomer
     @Produces("application/json")
-    OperationResult requestAuthentication(@PathParam("serviceId") String serviceId, @Valid AuthenticationRequest authenticationRequest);
+    OperationResult requestAuthentication(@PathParam("serviceId") String serviceId, @NotNull @Valid AuthenticationRequest authenticationRequest);
 
     @POST
     @Path("{serviceId}/notifications/approval")
     @AuthenticateCustomer
     @Consumes("application/json")
     @Produces("application/json")
-    OperationResult requestApproval(@PathParam("serviceId") String serviceId, @Valid ApprovalRequest req);
+    OperationResult requestApproval(@PathParam("serviceId") String serviceId, @NotNull @Valid ApprovalRequest req);
+
+    @POST
+    @Path("{serviceId}/notifications/generic")
+    @AuthenticateCustomer
+    @Consumes("application/json")
+    @Produces("application/json")
+    OperationResult sendGenericNotification(@PathParam("serviceId") String serviceId, @NotNull @Valid GenericNotificationRequest notificationRequest);
 }
