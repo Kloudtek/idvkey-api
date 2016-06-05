@@ -1,7 +1,7 @@
 {
   "userRef": "my-user-ref",
-  "callbackUrl": "https://mysite.com/public/mywebsite",
-  "cancelUrl": "https://mysite.com/public/cancelUrl",
+  "callbackUrl": "https://dummy.com/",
+  "cancelUrl": "https://dummy.com/",
   "title": "Credit card fraud alert",
   "text": "One of the transactions on your credit card might have been fraudulent, please confirm you paid 50$ at ARCO PETROL STATION in san francisco",
   "denyConfirmMsg": "Are you certain you wish to report this transaction as likely fraudulent ?",

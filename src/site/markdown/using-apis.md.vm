@@ -35,26 +35,36 @@ on the RAML format (you can also [download the "raw" RAML files](raml/idvkey-ram
 
 $h2 Notification operations
 
-Notification operations are the type of IDVKey operation most commonly used, and are all used in a 2 step process.
+IDVKey allows you to send various types of notifications to a user to which (s)he will be able to (optionally) respond. In order to send a
+notification to a user, (s)he will first need to approve linking his IDVKey to your service/website (this will be done
+automatically if you use IDVKey identification rather than pre-identified authentication).
 
-1) Invoke the approve REST API in order to send the notification, including a callback URL on your website where the user will
-eventually be redirected to after he's responded to the notification. This will return an operation id and a url that you should redirect your user's browser to
+There are several kinds of notifications that you can use:
 
-2) The user will eventually return to your website at the URL you provided when you invoked the notification operation,
-appended with a query parameter 'opId'. You then should use this opId to invoke a second corresponding API in order to see what was the user's response.
+- Authentication notifications will be used to securely authenticate a user.
 
-Because of this process, in certain cases you will need to store your user's state between the point where you redirect him and the point where he returns to your website.
-For example if you are using the approval operation to confirm changing the user's email address, you would need to store the new email address he submitted and only change it
-once you've called the "get approval state" operation.
+- Approval notifications will be used to display some text to the user (what he's approving), and give him the options to either approve or deny.
 
-How you store this state is of a vital importance, because if it's done in the wrong way it would open the way for a hacker to change this data and perform an operation that is
-different from what the user has approved on his IDVKey device, so keep in mind that your security will only be so good as whatever method you choose.
+- Generic notifications will in addition to display a text to user allow you to customize what buttons or menu options will be displayed to the user,
+as well as allowing to use confirmation dialogs and post-selection messages.
 
-The best way to store this data is keep it in your server infrastructure, for example in a server-side session, or in a database.
+If you are sending a notification that doesn't require your service/website to wait for the user to respond, you just need to invoke the approve REST API to send the notification you want.
 
-A less secure ways to do it would be to store the state in a cookie (in which case we strongly recommend you cryptographically sign the data and then verify it before using it).
+If your service is specifically a website and you need it to wait until your user has responded to the notification, just set the callbackUrl
+parameter to a page on your website where the user will be redirected to after responding to the notification. This will cause
+the operation result to include a redirectUrl where you should redirect (using http 302) the user to.
 
-**Under no circonstance should you ever include that data in the callback URL** as that would be too easy for a third party to maliciously change.
+Once the user has responded to the notification, he will be redirected to the callbackUrl url you specified, with the query parameter 'opId' appended to it (this
+will match the opId value you received when you originally sent the notification). You will then be able to invoke the corresponding REST API to find out what
+the response of the user was (or alternatively that he cancelled it or that the operation timed out)
+
+*IMPORTANT NOTE*: When you are using idvkey to require the user to approve something, it is of vital importance that whatever he is approving is protected
+from tampering.
+
+Generally this will require data that was used to initiate a notification to be retained and then subsequently used once the user has responded. You should
+NOT use the callbackUrl to transfer this data between the two steps since that is very vulnerable to tampering in various ways.
+
+Instead we strongly recommend that you keep this data server-side (in a transient web session or in a database).
 
 $h4 Linking a user to your website/service
 
@@ -344,4 +354,28 @@ Content-Type: application/json
 {
 "state": "ACCEPTED"
 }
+```
+
+$h5 Generic
+
+Generic notification are extremely powerful and highly customizable.
+
+In addition to displaying a message to the user (as an approval does), you will be able to define whatever buttons or
+menu options you want.
+
+Additionally you will be able to add confirmation dialogs when a user click on one of those action button/menu, and a post-selection message dialog.
+
+In the future you will also have the ability to request the user to input information as part of his response.
+
+Also unlike approval and authentication (which has a short expiry time), and implement notifications your user
+will receive even if he's not currently interacting with you website at that moment.
+
+Java:
+
+```
+URL dummyUrl = new URL("http://dummy");
+GenericNotificationRequest.Action action1 = new GenericNotificationRequest.Action("ok", "I did that transaction", "green", null, null, GenericNotificationRequest.Location.MAIN_BUTTON);
+GenericNotificationRequest.Action action2 = new GenericNotificationRequest.Action("fraud", "I did not do that transaction", "red", null, "Our fraud team will contact you shortly", GenericNotificationRequest.Location.MAIN_BUTTON);
+apiClient.sendGenericNotification(websiteId, new GenericNotificationRequest(userCtx.getLinkedUserRef(), dummyUrl,
+dummyUrl, "Credit card fraud alert", "One of the transactions on your credit card might have been fraudulent, please confirm you paid 50$ at ARCO PETROL STATION in san francisco", null, null, action1, action2));
 ```

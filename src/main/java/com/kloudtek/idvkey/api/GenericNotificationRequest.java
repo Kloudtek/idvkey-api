@@ -276,7 +276,7 @@ public class GenericNotificationRequest extends AbstractNotificationRequest {
         /**
          * Get color for MAIN_BUTTON colors
          *
-         * @return
+         * @return color
          */
         @Nullable
         public String getColor() {

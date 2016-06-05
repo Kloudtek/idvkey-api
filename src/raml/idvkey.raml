@@ -112,6 +112,22 @@ mediaType:  application/json
                     example: !include operationResult-example.json
               404:
                 description: service not found
+        /generic:
+          post:
+            description: Send a generic customization that can be extensively customized
+            body:
+              application/json:
+                schema: !include genericNotificationRequest.json
+                example: !include genericNotificationRequest-example.json
+            responses:
+              200:
+                description: Request submitted successfully. returns operation id and the url where the user browser can be redirected to if required.
+                body:
+                  application/json:
+                    schema: !include operationResult.json
+                    example: !include operationResult-example.json
+              404:
+                description: service not found
 /notifications:
   description: Notification operations
   /authentication:
@@ -139,6 +155,22 @@ mediaType:  application/json
             body:
               text/plain:
           404:
-            description: notification not found, error details included in body
+            description: notification not found
             body:
               text/plain:
+                description: Error details
+  /generic:
+    /{opId}:
+      get:
+        description: Retrieve a generic notification's status
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include genericNotificationRequestStatus.json
+                example: !include genericNotificationRequestStatus-example.json
+          404:
+            description: notification not found
+            body:
+              text/plain:
+                description: Error details

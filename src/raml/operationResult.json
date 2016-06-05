@@ -9,5 +9,8 @@
       "type": "string",
       "format": "uri"
     }
-  }
+  },
+  "required": [
+    "opId"
+  ]
 }
