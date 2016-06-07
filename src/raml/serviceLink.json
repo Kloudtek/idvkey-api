@@ -8,5 +8,9 @@
     "userRef": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "serviceId",
+    "userRef"
+  ]
 }

@@ -50,7 +50,7 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl, @NotNull URL cancelUrl,
                            @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel) {
-        super(redirectUrl, cancelUrl);
+        super(redirectUrl);
         this.userRef = userRef;
         this.title = title;
         this.text = text;

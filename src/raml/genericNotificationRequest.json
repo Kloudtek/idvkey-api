@@ -10,12 +10,7 @@
       "type": "string",
       "format": "uri",
       "description": "URL to redirect user to after he's responded to the notification. This can be set to any (valid) dummy URL if you don't need to have the user browser wait for his response to the notification."
-    },
-    "cancelUrl": {
-      "type": "string",
-      "format": "uri",
-      "description": "URL to redirect user if he cancels the notification while waiting on the web page (like callbackUrl this can be set to a dummy but valid value if you don't need it)"
-    },
+    }
     "title": {
       "type": "string",
       "description": "Title for the approval"

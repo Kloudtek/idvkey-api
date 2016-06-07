@@ -16,20 +16,15 @@ public class ServiceLinkRequest {
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
     private String userRef;
-    @JsonProperty(required = true)
-    @javax.validation.constraints.NotNull
+    @JsonProperty
     private URL url;
-    @JsonProperty(required = true)
-    @javax.validation.constraints.NotNull
-    private URL cancelUrl;
 
     public ServiceLinkRequest() {
     }
 
-    public ServiceLinkRequest(@NotNull String userRef, @NotNull URL url, @NotNull URL cancelUrl) {
+    public ServiceLinkRequest(@NotNull String userRef, @NotNull URL url) {
         this.userRef = userRef;
         this.url = url;
-        this.cancelUrl = cancelUrl;
     }
 
     @NotNull
@@ -41,21 +36,11 @@ public class ServiceLinkRequest {
         this.userRef = userRef;
     }
 
-    @NotNull
     public URL getUrl() {
         return url;
     }
 
-    public void setUrl(@NotNull URL url) {
+    public void setUrl(URL url) {
         this.url = url;
-    }
-
-    @NotNull
-    public URL getCancelUrl() {
-        return cancelUrl;
-    }
-
-    public void setCancelUrl(@NotNull URL cancelUrl) {
-        this.cancelUrl = cancelUrl;
     }
 }

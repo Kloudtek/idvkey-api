@@ -13,5 +13,8 @@
     "userRef": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "state"
+  ]
 }

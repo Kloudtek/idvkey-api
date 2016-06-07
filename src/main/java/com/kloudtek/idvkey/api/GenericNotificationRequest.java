@@ -47,7 +47,7 @@ public class GenericNotificationRequest extends AbstractNotificationRequest {
 
     public GenericNotificationRequest(@NotNull String userRef, @NotNull URL callbackUrl, @NotNull URL cancelUrl, @NotNull String title, @NotNull String text, boolean centeredHorizontal, boolean centeredVertical,
                                       boolean cancellable, @Nullable SecurityLevel securityLevel, @Nullable Date expiry, Action... actions) {
-        super(callbackUrl, cancelUrl);
+        super(callbackUrl);
         this.userRef = userRef;
         this.title = title;
         this.text = text;

@@ -13,19 +13,15 @@ import java.net.URL;
  * Created by yannick on 22/3/16.
  */
 public class AbstractNotificationRequest {
-    @JsonProperty(required = true)
+    @JsonProperty(required = false)
     @NotNull
     private URL callbackUrl;
-    @JsonProperty(required = true)
-    @NotNull
-    private URL cancelUrl;
 
     public AbstractNotificationRequest() {
     }
 
-    public AbstractNotificationRequest(URL callbackUrl, URL cancelUrl) {
+    public AbstractNotificationRequest(URL callbackUrl) {
         this.callbackUrl = callbackUrl;
-        this.cancelUrl = cancelUrl;
     }
 
     @NotNull
@@ -37,15 +33,6 @@ public class AbstractNotificationRequest {
         this.callbackUrl = callbackUrl;
     }
 
-    @NotNull
-    public URL getCancelUrl() {
-        return cancelUrl;
-    }
-
-    public void setCancelUrl(@NotNull URL cancelUrl) {
-        this.cancelUrl = cancelUrl;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,23 +40,19 @@ public class AbstractNotificationRequest {
 
         AbstractNotificationRequest that = (AbstractNotificationRequest) o;
 
-        if (callbackUrl != null ? !callbackUrl.equals(that.callbackUrl) : that.callbackUrl != null) return false;
-        return cancelUrl != null ? cancelUrl.equals(that.cancelUrl) : that.cancelUrl == null;
+        return callbackUrl != null ? callbackUrl.equals(that.callbackUrl) : that.callbackUrl == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = callbackUrl != null ? callbackUrl.hashCode() : 0;
-        result = 31 * result + (cancelUrl != null ? cancelUrl.hashCode() : 0);
-        return result;
+        return callbackUrl != null ? callbackUrl.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "AbstractNotificationRequest{" +
                 "callbackUrl=" + callbackUrl +
-                ", cancelUrl=" + cancelUrl +
                 '}';
     }
 }

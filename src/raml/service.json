@@ -28,5 +28,12 @@
       "type": "string",
       "format": "date-time"
     }
-  }
+  },
+  "required": [
+    "id",
+    "name",
+    "suggestedSecurityLevel",
+    "created",
+    "lastUpdated"
+  ]
 }
