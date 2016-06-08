@@ -20,22 +20,22 @@ public class AuthenticationRequest extends AbstractNotificationRequest {
     public AuthenticationRequest() {
     }
 
-    public AuthenticationRequest(URL callbackURL, URL cancelUrl) {
+    public AuthenticationRequest(URL callbackURL) {
         super(callbackURL);
     }
 
-    public AuthenticationRequest(URL callbackUrl, URL cancelUrl, SecurityLevel securityLevel) {
+    public AuthenticationRequest(URL callbackUrl, SecurityLevel securityLevel) {
         super(callbackUrl);
         this.securityLevel = securityLevel;
     }
 
-    public AuthenticationRequest(URL callbackUrl, URL cancelUrl, SecurityLevel securityLevel, String userRef) {
+    public AuthenticationRequest(URL callbackUrl, SecurityLevel securityLevel, String userRef) {
         super(callbackUrl);
         this.securityLevel = securityLevel;
         this.userRef = userRef;
     }
 
-    public AuthenticationRequest(URL callbackUrl, URL cancelUrl, String userRef) {
+    public AuthenticationRequest(URL callbackUrl, String userRef) {
         super(callbackUrl);
         this.userRef = userRef;
     }
