@@ -105,8 +105,7 @@
   },
   "required": [
     "userRef",
-    "redirectUrl",
-    "cancelUrl",
+    "callbackUrl",
     "title",
     "text"
   ]

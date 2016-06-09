@@ -17,6 +17,8 @@ public class ApprovalRequest extends AbstractNotificationRequest {
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
     private String userRef;
+    @JsonProperty
+    private String sessionId;
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
     private String title;
@@ -45,16 +47,18 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl,
                            @NotNull String title, @NotNull String text) {
-        this(userRef, redirectUrl, title, text, null);
+        this(userRef, redirectUrl, title, text, null, null);
     }
 
     public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl,
-                           @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel) {
+                           @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel,
+                           @Nullable String sessionId) {
         super(redirectUrl);
         this.userRef = userRef;
         this.title = title;
         this.text = text;
         this.securityLevel = securityLevel;
+        this.sessionId = sessionId;
     }
 
     @NotNull
@@ -146,5 +150,13 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public void setSecurityLevel(SecurityLevel securityLevel) {
         this.securityLevel = securityLevel;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

@@ -1,4 +1,5 @@
 {
   "serviceId": "ASDFJDFSUJI8ASDF2ASDFJI54A",
+  "userRef": "my-user-ref",
   "callbackUrl": "https://mysite.com/public/mywebsite"
 }

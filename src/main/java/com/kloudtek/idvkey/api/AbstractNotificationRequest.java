@@ -5,8 +5,8 @@
 package com.kloudtek.idvkey.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 
-import javax.validation.constraints.NotNull;
 import java.net.URL;
 
 /**
@@ -14,22 +14,21 @@ import java.net.URL;
  */
 public class AbstractNotificationRequest {
     @JsonProperty(required = false)
-    @NotNull
     private URL callbackUrl;
 
     public AbstractNotificationRequest() {
     }
 
-    public AbstractNotificationRequest(URL callbackUrl) {
+    public AbstractNotificationRequest(@Nullable URL callbackUrl) {
         this.callbackUrl = callbackUrl;
     }
 
-    @NotNull
+    @Nullable
     public URL getCallbackUrl() {
         return callbackUrl;
     }
 
-    public void setCallbackUrl(@NotNull URL callbackUrl) {
+    public void setCallbackUrl(@Nullable URL callbackUrl) {
         this.callbackUrl = callbackUrl;
     }
 

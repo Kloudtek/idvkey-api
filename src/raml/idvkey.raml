@@ -78,13 +78,26 @@ mediaType:  application/json
         /authentication:
           post:
             description: Request user authentication
-            queryParameters:
-              preId:
-                description: Must be set to true if this is an authentication with a pre-identified user
             body:
               application/json:
                 schema: !include authRequest.json
                 example: !include authRequest-example.json
+            responses:
+              200:
+                description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
+                body:
+                  application/json:
+                    schema: !include operationResult.json
+                    example: !include operationResult-example.json
+              404:
+                description: service not found, or authentication not found
+        /preidauthentication:
+          post:
+            description: Request user authentication where the user has been pre-identified
+            body:
+              application/json:
+                schema: !include preIdAuthRequest.json
+                example: !include preIdAuthRequest-example.json
             responses:
               200:
                 description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
@@ -130,6 +143,21 @@ mediaType:  application/json
                 description: service not found
 /notifications:
   description: Notification operations
+  /preidauthentication:
+    /{opId}:
+      get:
+        description: Retrieve the authentication's status (and response if exists)
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include authRequestStatus.json
+                example: !include authRequestStatus-example.json
+          404:
+            description: authentication request or service not found
+            body:
+              text/plain:
+                description: Error details
   /authentication:
     /{opId}:
       get:

@@ -10,7 +10,7 @@
       "type": "string",
       "format": "uri",
       "description": "URL on service website where the user will be redirected to after accepting the link request"
-    }
+    },
     "securityLevel": {
       "type": "string",
       "description": "Security level for the approval request",

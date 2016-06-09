@@ -7,6 +7,10 @@
       "format": "uri",
       "description": "URL to redirect user to after he's been responded to the authentication request"
     },
+    "userRef": {
+      "type": "string",
+      "description": "User reference"
+    },
     "securityLevel": {
       "type": "string",
       "description": "Security level for the authentication request (if not set will default to website suggested security level)",
@@ -19,6 +23,6 @@
     }
   },
   "required": [
-    "callbackUrl"
+    "userRef"
   ]
 }

@@ -57,6 +57,12 @@ public interface ServiceAPI {
     OperationResult requestAuthentication(@PathParam("serviceId") String serviceId, @NotNull @Valid AuthenticationRequest authenticationRequest);
 
     @POST
+    @Path("{serviceId}/notifications/preidauthentication")
+    @AuthenticateCustomer
+    @Produces("application/json")
+    OperationResult requestPreIdentifiedAuthentication(@PathParam("serviceId") String serviceId, @NotNull @Valid PreIdentifiedAuthenticationRequest authenticationRequest);
+
+    @POST
     @Path("{serviceId}/notifications/approval")
     @AuthenticateCustomer
     @Consumes("application/json")

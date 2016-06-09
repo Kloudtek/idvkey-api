@@ -7,7 +7,8 @@
     },
     "redirectUrl": {
       "type": "string",
-      "format": "uri"
+      "format": "uri",
+      "description": "URL you should redirect (http 302) the browser to. This will only be set if you specified a callback URL"
     }
   },
   "required": [

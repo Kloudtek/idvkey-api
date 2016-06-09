@@ -10,7 +10,7 @@
       "type": "string",
       "format": "uri",
       "description": "URL to redirect user to after he's been authenticated"
-    }
+    },
     "title": {
       "type": "string",
       "description": "Title for the approval"
@@ -62,7 +62,6 @@
   },
   "required": [
     "userRef",
-    "redirectUrl",
     "title",
     "text"
   ]

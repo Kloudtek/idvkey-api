@@ -5,83 +5,70 @@
 package com.kloudtek.idvkey.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.net.URL;
 
 /**
  * Created by yannick on 22/3/16.
  */
-public class AuthenticationRequest extends AbstractNotificationRequest {
+public class AuthenticationRequest {
+    @JsonProperty(required = true)
+    private URL callbackUrl;
     @JsonProperty
     private SecurityLevel securityLevel;
-    @JsonProperty
-    private String userRef;
 
     public AuthenticationRequest() {
     }
 
-    public AuthenticationRequest(URL callbackURL) {
-        super(callbackURL);
-    }
-
-    public AuthenticationRequest(URL callbackUrl, SecurityLevel securityLevel) {
-        super(callbackUrl);
+    public AuthenticationRequest(@NotNull URL callbackUrl, @Nullable SecurityLevel securityLevel) {
+        this.callbackUrl = callbackUrl;
         this.securityLevel = securityLevel;
     }
 
-    public AuthenticationRequest(URL callbackUrl, SecurityLevel securityLevel, String userRef) {
-        super(callbackUrl);
-        this.securityLevel = securityLevel;
-        this.userRef = userRef;
+    @NotNull
+    public URL getCallbackUrl() {
+        return callbackUrl;
     }
 
-    public AuthenticationRequest(URL callbackUrl, String userRef) {
-        super(callbackUrl);
-        this.userRef = userRef;
+    public void setCallbackUrl(@NotNull URL callbackUrl) {
+        this.callbackUrl = callbackUrl;
     }
 
+    @Nullable
     public SecurityLevel getSecurityLevel() {
         return securityLevel;
     }
 
-    public void setSecurityLevel(SecurityLevel securityLevel) {
+    public void setSecurityLevel(@Nullable SecurityLevel securityLevel) {
         this.securityLevel = securityLevel;
-    }
-
-    public String getUserRef() {
-        return userRef;
-    }
-
-    public void setUserRef(String userRef) {
-        this.userRef = userRef;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AuthenticationRequest)) return false;
-        if (!super.equals(o)) return false;
 
         AuthenticationRequest that = (AuthenticationRequest) o;
 
-        if (securityLevel != that.securityLevel) return false;
-        return userRef != null ? userRef.equals(that.userRef) : that.userRef == null;
+        if (callbackUrl != null ? !callbackUrl.equals(that.callbackUrl) : that.callbackUrl != null) return false;
+        return securityLevel == that.securityLevel;
 
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = callbackUrl != null ? callbackUrl.hashCode() : 0;
         result = 31 * result + (securityLevel != null ? securityLevel.hashCode() : 0);
-        result = 31 * result + (userRef != null ? userRef.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "AuthenticationRequest{" +
-                "securityLevel=" + securityLevel +
-                ", userRef='" + userRef + '\'' +
-                "} " + super.toString();
+                "callbackUrl=" + callbackUrl +
+                ", securityLevel=" + securityLevel +
+                '}';
     }
 }
