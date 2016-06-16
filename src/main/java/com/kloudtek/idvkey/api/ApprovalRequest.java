@@ -5,6 +5,7 @@
 package com.kloudtek.idvkey.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,30 +17,42 @@ import java.net.URL;
 public class ApprovalRequest extends AbstractNotificationRequest {
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
+    @JsonPropertyDescription("The user reference for the user which needs to approve this request")
     private String userRef;
-    @JsonProperty
-    private String sessionId;
+    //    @JsonProperty
+//    @JsonPropertyDescription("An optional session id. If this is set you will have to provide the same session id when getting the approval status.")
+//    private String sessionId;
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
+    @JsonPropertyDescription("Approval notification title")
     private String title;
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
+    @JsonPropertyDescription("Approval notification text")
     private String text;
     @JsonProperty
+    @JsonPropertyDescription("Approval notification short text. This will be displayed when there is limited size like for example in android notifications")
     private String shortText;
     @JsonProperty
+    @JsonPropertyDescription("Set if the text should be centered horizontally")
     private boolean centeredHorizontal = true;
     @JsonProperty
+    @JsonPropertyDescription("Set if the text should be centered vertically")
     private boolean centeredVertical = true;
     @JsonProperty
+    @JsonPropertyDescription("If set and the user denies the notification, this text will be displayed and the user will be requested to confirm the denial")
     private String denyConfirmMsg;
     @JsonProperty
+    @JsonPropertyDescription("If set and the user approves the notification, this text will be displayed and the user will be requested to confirm the approval")
     private String approveConfirmMsg;
     @JsonProperty
+    @JsonPropertyDescription("This message will be displayed to the user after he denies approval")
     private String denyMsg;
     @JsonProperty
+    @JsonPropertyDescription("This message will be displayed to the user after he approves this request")
     private String approveMsg;
     @JsonProperty
+    @JsonPropertyDescription("Security level for this operation. If not set the service/website default security level will be used.")
     private SecurityLevel securityLevel;
 
     public ApprovalRequest() {
@@ -47,18 +60,16 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl,
                            @NotNull String title, @NotNull String text) {
-        this(userRef, redirectUrl, title, text, null, null);
+        this(userRef, redirectUrl, title, text, null);
     }
 
     public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl,
-                           @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel,
-                           @Nullable String sessionId) {
+                           @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel) {
         super(redirectUrl);
         this.userRef = userRef;
         this.title = title;
         this.text = text;
         this.securityLevel = securityLevel;
-        this.sessionId = sessionId;
     }
 
     @NotNull
@@ -152,11 +163,11 @@ public class ApprovalRequest extends AbstractNotificationRequest {
         this.securityLevel = securityLevel;
     }
 
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
+//    public String getSessionId() {
+//        return sessionId;
+//    }
+//
+//    public void setSessionId(String sessionId) {
+//        this.sessionId = sessionId;
+//    }
 }
