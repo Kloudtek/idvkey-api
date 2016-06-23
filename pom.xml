@@ -177,7 +177,7 @@
         <dependency>
             <groupId>com.kloudtek.kryptotek</groupId>
             <artifactId>kryptotek-core</artifactId>
-            <version>1.0.14</version>
+            <version>1.0.18</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

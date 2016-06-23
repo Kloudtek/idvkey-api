@@ -29,7 +29,7 @@ When submitting an API request to our servers, you need to use your API Key to s
 
 In order to do that, you will need to add three headers to your HTTP request:
 
-**X-NOUNCE**: This should a different string for every request (whatever the string is doesn't matter). We highly recommend using a (UUID)[https://en.wikipedia.org/wiki/Universally_unique_identifier] algorithm.
+**X-NONCE**: This should a different string for every request (whatever the string is doesn't matter). We highly recommend using a (UUID)[https://en.wikipedia.org/wiki/Universally_unique_identifier] algorithm.
 
 **X-TIMESTAMP**: This should be a timestamp in (ISO 8601)[https://en.wikipedia.org/wiki/ISO_8601] format, using UTC timezone. So for example: `2014-12-30T23:54:46` . Please note it is important that your time is accurate, otherwise the requests will fail authentication.
 
@@ -40,7 +40,7 @@ In order to do that, you will need to add three headers to your HTTP request:
 In order to generate the signature, you will need to concatenate various elements of data from the request, before using the API key to sign that data (`\n` = NEWLINE).
 
 ```
-HTTP METHOD (in upper case) + \n + URI + \n + NOUNCE + \n + ISOTIMESTAMP + \n IDENTITY (value of X-IDENTITY header) + \n + REQUEST CONTENT (optional)
+HTTP METHOD (in upper case) + \n + URI + \n + NONCE + \n + ISOTIMESTAMP + \n IDENTITY (value of X-IDENTITY header) + \n + REQUEST CONTENT (optional)
 ```
 
 The whole string should then be converted to bytes using UTF-8, and appended with the POST DATA (if any). This will provide you with the data to be signed
@@ -49,7 +49,7 @@ so in java this could would be:
 
 ```
 ByteArrayOutputStream buf = new ByteArrayOutputStream();
-String appendedData = method.toUpperCase().trim() + '\n' + uri.trim() + '\n' + nounce + '\n' + timestamp.trim().toUpperCase() + '\n' + identity + '\n');
+String appendedData = method.toUpperCase().trim() + '\n' + uri.trim() + '\n' + nonce + '\n' + timestamp.trim().toUpperCase() + '\n' + identity + '\n');
 buf.write(appendedData.getBytes("UTF-8"));
 if( content != null ) {
 buf.write(content);
@@ -63,7 +63,7 @@ So for example, assuming you have been assigned the following HMAC-256 key (raw 
 9vY7UUGRlpuk4MxXdTPPbqqFwcKVvpMbFwbGv+b/V2c=
 ```
 
-If you needed to perform a POST operation to the url `https://api.idvkey.com/someapi` and submit the string `hello world` as payload, you would need to first generate a nounce which for this example will be:
+If you needed to perform a POST operation to the url `https://api.idvkey.com/someapi` and submit the string `hello world` as payload, you would need to first generate a nonce which for this example will be:
 
 ```
 e44fc2ca-460a-4e82-b88f-41dca6cdec19
@@ -109,7 +109,7 @@ So using all this data, your HTTP request should be:
 
 ```
 POST /someapi HTTP/1.0
-X-NOUNCE: e44fc2ca-460a-4e82-b88f-41dca6cdec19
+X-NONCE: e44fc2ca-460a-4e82-b88f-41dca6cdec19
 X-TIMESTAMP: 2016-03-30T23:54:46
 X-IDENTITY: somekeyid
 X-SIGNATURE: aFRyoKNJxKPtZW4+cywAdiYcIbUbb9ZH5wkzxkG0t0Y=
@@ -120,7 +120,7 @@ hello world
 The response to your require will similarly be signed, this time by concatenating
 
 ```
-NOUNCE + \n + REQUEST SIGNATURE + \n + STATUS CODE + \n + RESPONSE CONTENT (optional)
+NONCE + \n + REQUEST SIGNATURE + \n + STATUS CODE + \n + RESPONSE CONTENT (optional)
 ```
 
 Like for the request convert this using base64 encode and append any data returned by the http request.
@@ -129,7 +129,7 @@ This logic in java would be:
 
 ```
 ByteArrayOutputStream buf = new ByteArrayOutputStream();
-String str = nounce.trim() + "\n" + requestSignature.trim() + "\n" + Integer.toString(statusCode) + "\n";
+String str = nonce.trim() + "\n" + requestSignature.trim() + "\n" + Integer.toString(statusCode) + "\n";
 buf.write(str.getBytes("UTF-8"));
 if( content != null ) {
 buf.write(content);
