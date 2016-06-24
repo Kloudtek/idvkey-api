@@ -4,15 +4,20 @@
 
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
- * Created by yannick on 17/3/16.
+ * User link to a service
  */
+@JsonClassDescription("User link to a service")
 public class ServiceLink {
-    @JsonProperty
+    @JsonProperty(required = true)
+    @JsonPropertyDescription("service identifier")
     private String serviceId;
-    @JsonProperty
+    @JsonProperty(required = true)
+    @JsonPropertyDescription("user reference")
     private String userRef;
 
     public ServiceLink() {

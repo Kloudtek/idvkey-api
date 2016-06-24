@@ -80,8 +80,8 @@ mediaType:  application/json
             description: Request user authentication
             body:
               application/json:
-                schema: !include authRequest.json
-                example: !include authRequest-example.json
+                schema: !include authenticationRequest.json
+                example: !include authenticationRequest-example.json
             responses:
               200:
                 description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
@@ -96,8 +96,8 @@ mediaType:  application/json
             description: Request user authentication where the user has been pre-identified
             body:
               application/json:
-                schema: !include preIdAuthRequest.json
-                example: !include preIdAuthRequest-example.json
+                schema: !include preIdentifiedAuthenticationRequest.json
+                example: !include preIdentifiedAuthenticationRequest-example.json
             responses:
               200:
                 description: Returns the operation id and the url where the user browser should be redirected to in order to complete the operation.
@@ -151,8 +151,8 @@ mediaType:  application/json
           200:
             body:
               application/json:
-                schema: !include authRequestStatus.json
-                example: !include authRequestStatus-example.json
+                schema: !include authenticationRequestStatus.json
+                example: !include authenticationRequestStatus-example.json
           404:
             description: authentication request or service not found
             body:
@@ -166,8 +166,8 @@ mediaType:  application/json
           200:
             body:
               application/json:
-                schema: !include authRequestStatus.json
-                example: !include authRequestStatus-example.json
+                schema: !include authenticationRequestStatus.json
+                example: !include authenticationRequestStatus-example.json
           404:
             description: authentication request or service not found
             body:
@@ -179,9 +179,10 @@ mediaType:  application/json
         description: Retrieve the approval's status
         responses:
           200:
-            description: "returns one of the following values: PENDING, APPROVED, DENIED"
             body:
-              text/plain:
+              application/json:
+                schema: !include approvalRequestStatus.json
+                example: !include approvalRequestStatus-example.json
           404:
             description: notification not found
             body:

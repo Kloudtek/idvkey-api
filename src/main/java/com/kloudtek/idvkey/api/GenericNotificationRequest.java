@@ -1,6 +1,8 @@
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,29 +15,37 @@ import java.util.List;
 /**
  * Request to display a generic notification to the user
  */
+@JsonClassDescription("Request to display a generic notification to the user")
 public class GenericNotificationRequest extends AbstractNotificationRequest {
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
+    @JsonPropertyDescription("user reference (as assigned when user's account was linked to service/website")
     private String userRef;
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
+    @JsonPropertyDescription("notification title")
     private String title;
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
+    @JsonPropertyDescription("notification text")
     private String text;
-    @JsonProperty(required = false, defaultValue = "false")
+    @JsonProperty(defaultValue = "false")
+    @JsonPropertyDescription("Indicates if the notification is urgent")
     private boolean urgent;
-    @JsonProperty(required = false, defaultValue = "true")
+    @JsonProperty(defaultValue = "true")
+    @JsonPropertyDescription("Indicates if the notification text should be centered horizontally")
     private boolean centeredHorizontal;
-    @JsonProperty(required = false, defaultValue = "true")
+    @JsonProperty(defaultValue = "true")
+    @JsonPropertyDescription("Indicates if the notification text should be centered vertically")
     private boolean centeredVertical;
-    @JsonProperty(required = false, defaultValue = "true")
+    @JsonProperty(defaultValue = "true")
+    @JsonPropertyDescription("Indicates if the notification should be cancellable by the sender (set to false if you are sending an extremely sensitive and important notification, that way even if a hacker managed to access your systems he won't be able to cancel any notification already sent)")
     private boolean cancellable;
-    @JsonProperty(required = false)
-    private SecurityLevel securityLevel;
-    @JsonProperty(required = false)
+    @JsonProperty()
+    @JsonPropertyDescription("Expiry timestamp (if not set will never expire on client once received, and will only expire on server after a maximum limit that depends on service plan")
     private Date expiry;
     @JsonProperty
+    @JsonPropertyDescription("Notification actions")
     private List<Action> actions = new ArrayList<>();
 
     public GenericNotificationRequest() {
@@ -50,14 +60,13 @@ public class GenericNotificationRequest extends AbstractNotificationRequest {
                                       @NotNull String text, boolean centeredHorizontal, boolean centeredVertical,
                                       boolean cancellable, @Nullable SecurityLevel securityLevel, @Nullable Date expiry,
                                       @Nullable String sessionId, Action... actions) {
-        super(callbackUrl);
+        super(callbackUrl, securityLevel);
         this.userRef = userRef;
         this.title = title;
         this.text = text;
         this.centeredHorizontal = centeredHorizontal;
         this.centeredVertical = centeredVertical;
         this.cancellable = cancellable;
-        this.securityLevel = securityLevel;
         this.expiry = expiry;
         if (actions != null) {
             this.actions = Arrays.asList(actions);
@@ -174,25 +183,6 @@ public class GenericNotificationRequest extends AbstractNotificationRequest {
     }
 
     /**
-     * Get the security level for this notification. If null the default service/website security level will be used instead
-     *
-     * @return Security level (or null)
-     */
-    @Nullable
-    public SecurityLevel getSecurityLevel() {
-        return securityLevel;
-    }
-
-    /**
-     * Set the security level for this notification. If null the default service/website security level will be used instead
-     *
-     * @param securityLevel Security level or null if default should be used
-     */
-    public void setSecurityLevel(@Nullable SecurityLevel securityLevel) {
-        this.securityLevel = securityLevel;
-    }
-
-    /**
      * Get the expiry for this notification (there might still be a maximum expiry depending on your idvkey subscription plan)
      *
      * @return Expiry for this notification or null if it shouldn't expire
@@ -246,18 +236,24 @@ public class GenericNotificationRequest extends AbstractNotificationRequest {
     public static class Action {
         @JsonProperty(required = true)
         @javax.validation.constraints.NotNull
+        @JsonPropertyDescription("action identifier")
         private String id;
         @JsonProperty(required = true)
         @javax.validation.constraints.NotNull
+        @JsonPropertyDescription("action name (that will be displayed to the user)")
         private String name;
-        @JsonProperty(required = false)
+        @JsonProperty
+        @JsonPropertyDescription("action color (used only if the action location is set to BUTTON, in form of #RRGGBB #AARRGGBB or one of the following names: 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray', 'grey', 'lightgrey', 'darkgrey', 'aqua', 'fuchsia', 'lime', 'maroon', 'navy', 'olive', 'purple', 'silver', 'teal')")
         private String color;
-        @JsonProperty(required = false)
+        @JsonProperty
+        @JsonPropertyDescription("When this is set and the user selects this action, he will be displayed a confirmation dialog displaying this text")
         private String confirmationMsg;
-        @JsonProperty(required = false)
+        @JsonProperty
+        @JsonPropertyDescription("If this is set, then this text will be displayed to the user after he has selected this action")
         private String postSelectionMsg;
         @JsonProperty(required = true)
         @javax.validation.constraints.NotNull
+        @JsonPropertyDescription("Specify the location for this action (either as a button or as an overflow menu option)")
         private Location location;
 
         public Action() {
@@ -289,7 +285,7 @@ public class GenericNotificationRequest extends AbstractNotificationRequest {
         /**
          * Color to be used for an MAIN_BUTTON action.
          *
-         * @param color Color ( in form of  #RRGGBB #AARRGGBB or one of the following names: 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray', 'grey', 'lightgrey', 'darkgrey', 'aqua', 'fuchsia', 'lime', 'maroon', 'navy', 'olive', 'purple', 'silver', 'teal'.  )
+         * @param color Color (in form of  #RRGGBB #AARRGGBB or one of the following names: 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray', 'grey', 'lightgrey', 'darkgrey', 'aqua', 'fuchsia', 'lime', 'maroon', 'navy', 'olive', 'purple', 'silver', 'teal')
          */
         public void setColor(@Nullable String color) {
             this.color = color;

@@ -4,6 +4,7 @@
 
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,7 @@ import java.net.URL;
 /**
  * Used to request a confirmation from a user
  */
+@JsonClassDescription("Approval requests")
 public class ApprovalRequest extends AbstractNotificationRequest {
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull
@@ -51,9 +53,6 @@ public class ApprovalRequest extends AbstractNotificationRequest {
     @JsonProperty
     @JsonPropertyDescription("This message will be displayed to the user after he approves this request")
     private String approveMsg;
-    @JsonProperty
-    @JsonPropertyDescription("Security level for this operation. If not set the service/website default security level will be used.")
-    private SecurityLevel securityLevel;
 
     public ApprovalRequest() {
     }
@@ -65,11 +64,10 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public ApprovalRequest(@NotNull String userRef, @NotNull URL redirectUrl,
                            @NotNull String title, @NotNull String text, @Nullable SecurityLevel securityLevel) {
-        super(redirectUrl);
+        super(redirectUrl,securityLevel);
         this.userRef = userRef;
         this.title = title;
         this.text = text;
-        this.securityLevel = securityLevel;
     }
 
     @NotNull
@@ -153,13 +151,5 @@ public class ApprovalRequest extends AbstractNotificationRequest {
 
     public void setApproveMsg(String approveMsg) {
         this.approveMsg = approveMsg;
-    }
-
-    public SecurityLevel getSecurityLevel() {
-        return securityLevel;
-    }
-
-    public void setSecurityLevel(SecurityLevel securityLevel) {
-        this.securityLevel = securityLevel;
     }
 }

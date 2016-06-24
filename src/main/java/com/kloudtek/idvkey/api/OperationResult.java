@@ -4,18 +4,23 @@
 
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import javax.validation.constraints.NotNull;
 import java.net.URL;
 
 /**
- * Operation result, which is returned by IDVKey when you request any kind of user authentication operation.
+ * IDVKey operation result.
  */
+@JsonClassDescription("IDVKey operation result")
 public class OperationResult {
     @JsonProperty(required = true)
+    @JsonPropertyDescription("Operation identifier (this will be needed in order to check the operation status")
     private String opId;
     @JsonProperty
+    @JsonPropertyDescription("If a callback URL was specified in the request, this will provide you a URL that you should redirect (HTTP 302) your user browser's to. Once the operation is completed the user will be redirected back to the callbackUrl specified")
     private URL redirectUrl;
 
     public OperationResult() {

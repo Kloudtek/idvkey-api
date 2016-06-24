@@ -4,8 +4,7 @@
 
 package com.kloudtek.idvkey.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.Date;
 
@@ -13,28 +12,35 @@ import java.util.Date;
  * Represents a customer service (generally a website)
  */
 @JsonRootName("service")
+@JsonClassDescription("Represents a customer service (generally a website)")
 public class Service {
-    @JsonProperty
+    @JsonProperty(required = true)
+    @JsonPropertyDescription("Service identifier")
     private String id;
-    @JsonProperty
+    @JsonProperty(required = true)
+    @JsonPropertyDescription("Service name")
     private String name;
     @JsonProperty
+    @JsonPropertyDescription("Service website URL")
     private String website;
     @JsonProperty
-    private String suggestedSecurityLevel;
+    @JsonPropertyDescription("Default security level")
+    private String defaultSecurityLevel;
     @JsonProperty
+    @JsonPropertyDescription("Time at which the service was created")
     private Date created;
     @JsonProperty
+    @JsonPropertyDescription("Time at which the service was last updated")
     private Date lastUpdated;
 
     public Service() {
     }
 
-    public Service(String id, String name, String website, String suggestedSecurityLevel, Date created, Date lastUpdated) {
+    public Service(String id, String name, String website, String defaultSecurityLevel, Date created, Date lastUpdated) {
         this.id = id;
         this.name = name;
         this.website = website;
-        this.suggestedSecurityLevel = suggestedSecurityLevel;
+        this.defaultSecurityLevel = defaultSecurityLevel;
         this.created = created;
         this.lastUpdated = lastUpdated;
     }
@@ -63,12 +69,12 @@ public class Service {
         this.website = website;
     }
 
-    public String getSuggestedSecurityLevel() {
-        return suggestedSecurityLevel;
+    public String getDefaultSecurityLevel() {
+        return defaultSecurityLevel;
     }
 
-    public void setSuggestedSecurityLevel(String suggestedSecurityLevel) {
-        this.suggestedSecurityLevel = suggestedSecurityLevel;
+    public void setDefaultSecurityLevel(String defaultSecurityLevel) {
+        this.defaultSecurityLevel = defaultSecurityLevel;
     }
 
     public Date getCreated() {

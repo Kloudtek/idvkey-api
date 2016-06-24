@@ -4,14 +4,16 @@
 
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 
 /**
- * Created by yannick on 17/3/16.
+ * User to service link request
  */
+@JsonClassDescription("User to service link request")
 public class ServiceLinkRequest {
     @JsonProperty(required = true)
     @javax.validation.constraints.NotNull

@@ -4,13 +4,17 @@
 
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
- * Used to request a confirmation from a user
+ * approval request status
  */
+@JsonClassDescription("approval request status")
 public class ApprovalRequestStatus {
-    @JsonProperty
+    @JsonProperty(required = true)
+    @JsonPropertyDescription("approval status")
     private ApprovalStatus status;
 
     public ApprovalRequestStatus() {

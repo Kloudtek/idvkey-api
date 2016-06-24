@@ -4,16 +4,21 @@
 
 package com.kloudtek.idvkey.api;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Created by yannick on 16/3/16.
+ * Authentication request status
  */
+@JsonClassDescription("Authentication request status")
 public class AuthenticationRequestStatus {
-    @JsonProperty
+    @JsonProperty(required = true)
+    @JsonPropertyDescription("authentication request status")
     private ApprovalStatus status;
     @JsonProperty
+    @JsonPropertyDescription("User reference (or null if authentication hasn't been granted)")
     private String userRef;
 
     public AuthenticationRequestStatus() {

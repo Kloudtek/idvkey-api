@@ -49,5 +49,5 @@ public interface NotificationAPIService {
     @Path("generic/{opId}")
     @AuthenticateCustomer
     @Produces("application/json")
-    GenericNotificationStatus getGenericNotificationStatus(@NotNull @PathParam("opId") String opId);
+    GenericNotificationRequestStatus getGenericNotificationStatus(@NotNull @PathParam("opId") String opId);
 }
