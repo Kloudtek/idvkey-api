@@ -37,6 +37,7 @@ public interface ServiceAPI {
     @GET
     @Path("{serviceId}/links/requests/{opId}")
     @AuthenticateCustomer
+    @Produces("application/json")
     ServiceLinkRequestStatus getUserLinkRequestState(@PathParam("serviceId") String serviceId, @PathParam("opId") String opId);
 
     @GET
