@@ -23,7 +23,7 @@ $h2 SDKs
 
 The easiest way to use the APIs is to use one of our SDK (Software Development Kit):
 
-* [Java](http://www.idvkey.com/support/dev/sdk/idvkey-sdk-java/index.html)
+* [Java](http://www.idvkey.com/support/dev/sdk/sdks/idvkey-sdk-java/index.html)
 
 If your platform isn't supported by one of our development kits, you will need to write code to perform the HTTP rest operations,
 as well as it's security.

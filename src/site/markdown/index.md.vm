@@ -13,7 +13,7 @@ as well as various Software Development Kits (SDK) that will allow you to very e
 
 We currently provide SDKs for the following platforms/applications:
 
-* [Java](idvkey-sdk-java/index.html), with a [JSF-based example website](https://www.idvkey.com/support/dev/sdk/examples/idvkey-sdk-example-jsf/index.html)
+* [Java](http://www.idvkey.com/support/dev/sdk/sdks/idvkey-sdk-java/index.html), with a [JSF-based example website](https://www.idvkey.com/support/dev/sdk/examples/idvkey-sdk-example-jsf/index.html)
 * PHP (soon)
 
 More SDKs will be implemented in the future based on demand, feel free to add a request in the
