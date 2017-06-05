@@ -73,3 +73,5 @@ buildNumber.properties
 hs_err_pid*
 
 test-output
+target
+.DS_Store
