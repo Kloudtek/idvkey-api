@@ -10,7 +10,7 @@
 
     <groupId>com.kloudtek.idvkey</groupId>
     <artifactId>idvkey-api</artifactId>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9.0</version>
 
     <url>https://github.com/Kloudtek/idvkey-api</url>
     <name>IDVKey Cloud APIs</name>
