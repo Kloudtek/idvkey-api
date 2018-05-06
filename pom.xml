@@ -255,10 +255,6 @@
         </repository>
     </repositories>
     <distributionManagement>
-        <site>
-            <id>idvkey.site</id>
-            <url>s3://www.idvkey.com/support/dev</url>
-        </site>
         <repository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
@@ -268,15 +264,16 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
     <profiles>
         <profile>
             <id>release</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <groupId>org.kohsuke</groupId>
+                        <artifactId>pgp-maven-plugin</artifactId>
+                        <version>1.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -285,7 +282,8 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <keyname>${gpg.key}</keyname>
+                                    <secretkey>keyfile:${gpgfile}</secretkey>
+                                    <passphrase>literal:${gpgpass}</passphrase>
                                 </configuration>
                             </execution>
                         </executions>
