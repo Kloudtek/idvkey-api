@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.*;
 import java.util.Date;
 
 /**
- * Represents a customer service (generally a website)
+ * Represents a service that leverages IDVKey (generally a website)
  */
 @JsonRootName("service")
-@JsonClassDescription("Represents a customer service (generally a website)")
+@JsonClassDescription("Represents a service that leverages IDVKey (generally a website)")
 public class Service {
     @JsonProperty(required = true)
     @JsonPropertyDescription("Service identifier")
